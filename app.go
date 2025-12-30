@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
+	"os"
 )
 
 // App struct
@@ -24,4 +26,13 @@ func (a *App) startup(ctx context.Context) {
 // Greet returns a greeting for the given name
 func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello my nigga %s, It's show time!", name)
+}
+
+// read a file
+func (a *App) ReadFile(path string) string {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return ""
+	}
+	return base64.StdEncoding.EncodeToString(data)
 }
