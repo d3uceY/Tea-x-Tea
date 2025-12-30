@@ -1,11 +1,30 @@
-"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Upload, Download, Plus, Trash2, File } from "lucide-react"
+import { SaveTextFile } from './../wailsjs/go/main/App'
+import { useState } from "react"
 
 export default function App() {
+  const [writtenText, setWrittenText] = useState({
+    title: "",
+    content: ""
+  })
+  console.log(writtenText)
+  const updateFileTitle = (e) => {
+    setWrittenText((prev) => ({ ...prev, title: e.target.value }))
+  }
+
+  const updateFileContent = (e) => {
+    setWrittenText((prev) => ({ ...prev, content: e.target.value }))
+  }
+
+  const saveTextFile = () => {
+    SaveTextFile(writtenText.content, writtenText.title)
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -78,7 +97,7 @@ export default function App() {
               <CardContent className="space-y-4">
                 <div>
                   <label className="text-sm font-medium text-foreground block mb-2">File Name</label>
-                  <Input placeholder="Enter file name (e.g., myfile.txt)" type="text" />
+                  <Input onChange={updateFileTitle} name="fileName" placeholder="Enter file name (e.g., myfile)" type="text" />
                 </div>
               </CardContent>
             </Card>
@@ -91,6 +110,8 @@ export default function App() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <Textarea
+                  name="fileContent"
+                  onChange={updateFileContent}
                   placeholder="Paste or type your text content here..."
                   className="flex-1 min-h-64 font-mono resize-none"
                 />
@@ -100,7 +121,7 @@ export default function App() {
             {/* Save & Download Actions */}
             <div className="flex gap-3 justify-end">
               <Button variant="outline">Cancel</Button>
-              <Button>
+              <Button onClick={() => saveTextFile()}>
                 <Download className="w-4 h-4 mr-2" />
                 Save & Download
               </Button>

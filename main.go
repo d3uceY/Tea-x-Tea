@@ -29,7 +29,7 @@ func main() {
 			app,
 		},
 		DragAndDrop: &options.DragAndDrop{
-			EnableFileDrop: false,
+			EnableFileDrop: true,
 		},
 	})
 

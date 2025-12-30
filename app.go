@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"os"
 )
 
@@ -35,4 +36,25 @@ func (a *App) ReadFile(path string) string {
 		return ""
 	}
 	return base64.StdEncoding.EncodeToString(data)
+}
+
+// save a text file
+func (a *App) SaveTextFile(content, title string) error {
+	path, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
+		Title:           "Save text file",
+		DefaultFilename: title + ".txt",
+		Filters: []runtime.FileFilter{
+			{
+				DisplayName: "Text Files",
+				Pattern:     "*.txt",
+			},
+		},
+	})
+
+	// User cancelled dialog
+	if err != nil || path == "" {
+		return err
+	}
+
+	return os.WriteFile(path, []byte(content), 0644)
 }
