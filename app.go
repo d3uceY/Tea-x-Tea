@@ -2,11 +2,12 @@ package main
 
 import (
 	"context"
-	"encoding/base64"
 	"fmt"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"os"
+	"path/filepath"
 	"strings"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // FileInfo represents a file with its properties
@@ -14,6 +15,11 @@ type FileInfo struct {
 	Name     string `json:"name"`
 	FilePath string `json:"filePath"`
 	Size     string `json:"fileSize"`
+}
+
+type FileData struct {
+	FileTitle   string `json:"fileName"`
+	FileContent string `json:"fileContent"`
 }
 
 // App struct
@@ -38,12 +44,19 @@ func (a *App) Greet(name string) string {
 }
 
 // read a file
-func (a *App) ReadFile(path string) string {
+func (a *App) ReadFile(path string) (FileData, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return ""
+		return FileData{}, err
 	}
-	return base64.StdEncoding.EncodeToString(data)
+
+	fileName := filepath.Base(path)
+	content := string(data)
+
+	return FileData{
+		FileTitle:   fileName,
+		FileContent: content,
+	}, nil
 }
 
 // save a text file
