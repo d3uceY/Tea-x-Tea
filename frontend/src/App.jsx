@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Download, Plus, Trash2, File, Pencil } from "lucide-react"
-import { SaveTextFile, SelectFolderAndListFiles } from './../wailsjs/go/main/App'
+import { SaveTextFile, SelectFolderAndListFiles, ReadFile } from './../wailsjs/go/main/App'
 import { useState } from "react"
 
 export default function App() {
