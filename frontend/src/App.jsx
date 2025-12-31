@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
-import { Download, Plus, Trash2, File } from "lucide-react"
+import { Download, Plus, Trash2, File, Pencil } from "lucide-react"
 import { SaveTextFile, SelectFolderAndListFiles } from './../wailsjs/go/main/App'
 import { useState } from "react"
 
@@ -46,7 +46,7 @@ export default function App() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 py-8 !pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Sidebar - File List */}
           <div className="lg:col-span-1">
@@ -62,10 +62,20 @@ export default function App() {
                 {/* File List Items */}
                 <div className="space-y-2 max-h-96 overflow-y-auto">
                   {fileEntries && fileEntries.map((file, index) => (
-                    <button key={index} className="w-full text-left p-3 rounded-md bg-muted hover:bg-muted/80 transition">
-                      <p className="font-medium text-foreground text-sm">{file.name}</p>
-                      <p className="text-xs text-muted-foreground">{file.fileSize} bytes</p>
-                    </button>
+                    <div key={index} className="w-full p-3 rounded-md bg-muted hover:bg-muted/80 transition flex items-center justify-between">
+                      <div className="flex-1">
+                        <p className="font-medium text-foreground text-sm">{file.name}</p>
+                        <p className="text-xs text-muted-foreground">{file.fileSize} bytes</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button className="p-1.5 hover:bg-background rounded transition">
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button className="p-1.5 hover:bg-background rounded transition text-destructive">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
                   ))}
                   {!fileEntries && (
                     <p className="text-sm text-muted-foreground text-center py-4">No files loaded</p>
@@ -81,14 +91,6 @@ export default function App() {
                     size="sm">
                     <File className="w-4 h-4 mr-2" />
                     Open File Directory
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="text-destructive hover:text-destructive w-full bg-transparent"
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    Delete
                   </Button>
                 </div>
               </CardContent>
