@@ -4,9 +4,16 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"os"
+	"strings"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
+
+// FileInfo represents a file with its properties
+type FileInfo struct {
+	Name     string `json:"name"`
+	FilePath string `json:"filePath"`
+}
 
 // App struct
 type App struct {
@@ -57,4 +64,36 @@ func (a *App) SaveTextFile(content, title string) error {
 	}
 
 	return os.WriteFile(path, []byte(content), 0644)
+}
+
+func (a *App) SelectFolderAndListFiles() ([]FileInfo, error) {
+	dir, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
+		Title: "Select a folder",
+		Filters: []runtime.FileFilter{
+			{
+				DisplayName: "Text Files",
+				Pattern:     "*.txt",
+			},
+		},
+	})
+	if err != nil || dir == "" {
+		return nil, err
+	}
+
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return nil, err
+	}
+
+	var files []FileInfo
+	for _, entry := range entries {
+		if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".txt") {
+			files = append(files, FileInfo{
+				Name:     entry.Name(),
+				FilePath: dir + entry.Name(),
+			})
+		}
+	}
+
+	return files, nil
 }
