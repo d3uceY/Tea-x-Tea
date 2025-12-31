@@ -61,18 +61,15 @@ export default function App() {
               <CardContent className="space-y-2">
                 {/* File List Items */}
                 <div className="space-y-2 max-h-96 overflow-y-auto">
-                  <button className="w-full text-left p-3 rounded-md bg-muted hover:bg-muted/80 transition">
-                    <p className="font-medium text-foreground text-sm">document.txt</p>
-                    <p className="text-xs text-muted-foreground">2.4 KB</p>
-                  </button>
-                  <button className="w-full text-left p-3 rounded-md bg-muted hover:bg-muted/80 transition">
-                    <p className="font-medium text-foreground text-sm">notes.txt</p>
-                    <p className="text-xs text-muted-foreground">1.1 KB</p>
-                  </button>
-                  <button className="w-full text-left p-3 rounded-md bg-muted hover:bg-muted/80 transition">
-                    <p className="font-medium text-foreground text-sm">readme.txt</p>
-                    <p className="text-xs text-muted-foreground">3.7 KB</p>
-                  </button>
+                  {fileEntries && fileEntries.map((file, index) => (
+                    <button key={index} className="w-full text-left p-3 rounded-md bg-muted hover:bg-muted/80 transition">
+                      <p className="font-medium text-foreground text-sm">{file.name}</p>
+                      <p className="text-xs text-muted-foreground">{file.fileSize} bytes</p>
+                    </button>
+                  ))}
+                  {!fileEntries && (
+                    <p className="text-sm text-muted-foreground text-center py-4">No files loaded</p>
+                  )}
                 </div>
 
                 {/* File Actions */}
