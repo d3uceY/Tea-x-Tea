@@ -52,6 +52,7 @@ TeaXTea/
 - The selected directory path is saved to the SQLite database
 - On subsequent launches, the app automatically loads files from the last selected directory
 - Users can change the directory at any time
+<img width="929" height="51" alt="image" src="https://github.com/user-attachments/assets/cd0f65c8-970e-46a0-8581-4d6bd45dc33e" />
 
 #### 3. **File Operations**
 
@@ -59,18 +60,22 @@ TeaXTea/
 - Scans the selected directory for `.txt` files
 - Displays file list with name and size metadata
 - Clicking a file loads its content into the editor
+<img width="965" height="318" alt="image" src="https://github.com/user-attachments/assets/36e2e78b-c49e-44b2-ac88-804c9b6a9e29" />
 
 **Create/Edit Files:**
 - Users type content in the textarea editor
 - Provide a filename in the input field
 - Save triggers a native "Save File" dialog
 - File is written to the selected location
+<img width="1348" height="802" alt="image" src="https://github.com/user-attachments/assets/7b967455-57fb-40e2-beca-58c26070d622" />
+
 
 **Delete Files:**
 - Click delete icon on any file
 - Confirmation dialog (shadcn Dialog component) asks for confirmation
 - On confirmation, file is permanently deleted from disk
 - File list refreshes automatically
+<img width="1359" height="860" alt="image" src="https://github.com/user-attachments/assets/02fc71df-1c91-42da-a29d-a17f158d922b" />
 
 #### 4. **Frontend ↔ Backend Communication**
 - Wails generates JavaScript bindings from Go methods
