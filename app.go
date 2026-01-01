@@ -126,10 +126,17 @@ func (a *App) SelectFolderAndListFiles(getExisting bool) ([]FileInfo, error) {
 		if err != nil || dir == "" {
 			return nil, err
 		}
+		err = a.UpdateLastDir(dir)
+
+		if err != nil {
+			return nil, err
+		}
+
 		directory = dir
 	} else {
 		savedDirs, err := a.GetLastSavedDir()
 		if err != nil {
+			fmt.Println("failed to open file: %w", err)
 			return nil, err
 		}
 
