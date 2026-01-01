@@ -64,7 +64,7 @@ func getAppDataDir() (string, error) {
 		return "", err
 	}
 
-	appDir := filepath.Join(dir, "MyWailsApp")
+	appDir := filepath.Join(dir, "TeaXTea")
 	err = os.MkdirAll(appDir, 0755)
 
 	return appDir, err
