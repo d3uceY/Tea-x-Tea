@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./build/windows/icon.ico" alt="icon">
+</p>
+
 # TeaXTea 📝
 
 A lightweight, cross-platform desktop text file manager built with Wails, allowing users to create, edit, view, and manage text files with a modern, beautiful interface.
