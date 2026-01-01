@@ -88,9 +88,11 @@ func (a *App) ReadFile(path string) (FileData, error) {
 
 // save a text file
 func (a *App) SaveTextFile(content, title string) error {
+	formattedTitle, _ := strings.CutSuffix(title, ".txt")
+
 	path, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
 		Title:           "Save text file",
-		DefaultFilename: title + ".txt",
+		DefaultFilename: formattedTitle + ".txt",
 		Filters: []runtime.FileFilter{
 			{
 				DisplayName: "Text Files",
