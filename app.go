@@ -170,3 +170,12 @@ func (a *App) SelectFolderAndListFiles(getExisting bool) ([]FileInfo, error) {
 
 	return files, nil
 }
+
+// this deletes a file
+func (a *App) DeleteFile(path string) error {
+	err := os.Remove(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}

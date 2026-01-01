@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Download, Plus, Trash2, File, Pencil } from "lucide-react"
-import { SaveTextFile, SelectFolderAndListFiles, ReadFile } from './../wailsjs/go/main/App'
+import { SaveTextFile, SelectFolderAndListFiles, ReadFile, DeleteFile } from './../wailsjs/go/main/App'
 import { useState, useEffect } from "react"
 
 export default function App() {
@@ -15,11 +16,16 @@ export default function App() {
   const [lastSavedDir, setlastSavedDir] = useState(null)
   const [fileEntries, setFileEnteries] = useState(null);
   const [test, setTest] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [fileToDelete, setFileToDelete] = useState(null);
+
 
   const updateFileTitle = (e) => {
     setWrittenText((prev) => ({ ...prev, title: e.target.value }))
   }
 
+
+  // edit text file
   const editFile = async (path) => {
     return await ReadFile(path).then((data) => {
       setTest(data)
@@ -30,14 +36,7 @@ export default function App() {
     })
   }
 
-  const updateFileContent = (e) => {
-    setWrittenText((prev) => ({ ...prev, content: e.target.value }))
-  }
-
-  const saveTextFile = () => {
-    SaveTextFile(writtenText.content, writtenText.title)
-  }
-
+  // select target directory
   const selectDirectory = async (isExisting) => {
     return SelectFolderAndListFiles(isExisting)
       .then((res) => {
@@ -45,17 +44,42 @@ export default function App() {
       })
   }
 
+  // delete file
+  const deleteFile = async (path) => {
+    await DeleteFile(path);
+    selectDirectory(true)
+    setDeleteDialogOpen(false);
+    setFileToDelete(null);
+  }
+
+  // handle delete confirmation
+  const handleDeleteClick = (filePath) => {
+    setFileToDelete(filePath);
+    setDeleteDialogOpen(true);
+  }
+
+  const updateFileContent = (e) => {
+    setWrittenText((prev) => ({ ...prev, content: e.target.value }))
+  }
+
+// saves the text file
+  const saveTextFile = () => {
+    selectDirectory(true);
+    SaveTextFile(writtenText.content, writtenText.title)
+  }
+
+
   // on application load, last selected directory is fetched
   useEffect(() => {
     selectDirectory(true);
-  }, [])
+  }, [fileEntries])
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border">
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <h1 className="text-3xl font-bold text-foreground">Text File Manager</h1>
+          <h1 className="text-3xl font-bold text-foreground">TeaXTea</h1>
           <p className="text-muted-foreground mt-1">Upload, edit, and download text files</p>
         </div>
       </header>
@@ -87,7 +111,7 @@ export default function App() {
                         <button onClick={() => editFile(file.filePath)} className="p-1.5 hover:bg-background rounded transition">
                           <Pencil className="w-4 h-4" />
                         </button>
-                        <button className="p-1.5 hover:bg-background rounded transition text-destructive">
+                        <button onClick={() => handleDeleteClick(file.filePath)} className="p-1.5 hover:bg-background rounded transition text-destructive">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
@@ -159,6 +183,26 @@ export default function App() {
           </div>
         </div>
       </main>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. This will permanently delete the file from your directory.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={() => deleteFile(fileToDelete)}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
