@@ -107,23 +107,36 @@ func (a *App) SaveTextFile(content, title string) error {
 	return os.WriteFile(path, []byte(content), 0644)
 }
 
-
 // select directory of text files and send json data to frontend
-func (a *App) SelectFolderAndListFiles() ([]FileInfo, error) {
-	dir, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
-		Title: "Select a folder",
-		Filters: []runtime.FileFilter{
-			{
-				DisplayName: "Text Files",
-				Pattern:     "*.txt",
+// the getExisting bool is true, the function will try to
+// retrieve the directory from the database, otherwise it will prompt the user to select a directory
+func (a *App) SelectFolderAndListFiles(getExisting bool) ([]FileInfo, error) {
+	var directory string
+
+	if !getExisting {
+		dir, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
+			Title: "Select a folder to store TXT files",
+			Filters: []runtime.FileFilter{
+				{
+					DisplayName: "Text Files",
+					Pattern:     "*.txt",
+				},
 			},
-		},
-	})
-	if err != nil || dir == "" {
-		return nil, err
+		})
+		if err != nil || dir == "" {
+			return nil, err
+		}
+		directory = dir
+	} else {
+		savedDirs, err := a.GetLastSavedDir()
+		if err != nil {
+			return nil, err
+		}
+
+		directory = savedDirs[0].Dir
 	}
 
-	entries, err := os.ReadDir(dir)
+	entries, err := os.ReadDir(directory)
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +150,7 @@ func (a *App) SelectFolderAndListFiles() ([]FileInfo, error) {
 			}
 			files = append(files, FileInfo{
 				Name:     entry.Name(),
-				FilePath: filepath.Join(dir, entry.Name()),
+				FilePath: filepath.Join(directory, entry.Name()),
 				Size:     fmt.Sprintf("%d", info.Size()),
 			})
 		}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"database/sql"
 
 	_ "modernc.org/sqlite"
@@ -17,6 +18,7 @@ func InitDB(path string) error {
 		return err
 	}
 
+	fmt.Println("DB initialized on Skibidi")
 	// Test connection
 	return DB.Ping()
 }

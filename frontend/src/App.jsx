@@ -39,7 +39,7 @@ export default function App() {
   }
 
   const selectDirectory = async () => {
-    return SelectFolderAndListFiles()
+    return SelectFolderAndListFiles(false)
       .then((res) => {
         setFileEnteries(res)
       })
