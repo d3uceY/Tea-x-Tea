@@ -1,4 +1,10 @@
-# TeaXTea 📝
+<p align="center">
+  <img src="./build/appicon.png" alt="icon" width="90">
+</p>
+<div align="center">
+<h1>TeaXTea</h1>
+</div>
+
 
 A lightweight, cross-platform desktop text file manager built with Wails, allowing users to create, edit, view, and manage text files with a modern, beautiful interface.
 
