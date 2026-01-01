@@ -24,10 +24,11 @@ func (a *App) GetLastSavedDir() ([]Directory, error) {
 	return directories, nil
 }
 
-func (a *App) AddLastDir(dir string, id int) error {
+func (a *App) UpdateLastDir(dir string, id int) error {
 	_, err := DB.Exec(
-		"UPDATE last_dir_tb WHERE id = ? SET dir = ?",
+		"UPDATE last_dir_tb SET dir = ? WHERE id = ?",
 		dir,
+		id,
 	)
 	return err
 }
